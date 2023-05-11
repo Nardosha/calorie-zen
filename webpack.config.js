@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
     target: ['browserslist'],
@@ -52,7 +53,8 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: 'style.css'
-        })
+        }),
+        new MonacoWebpackPlugin()
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
