@@ -1,8 +1,8 @@
 import React, {useRef, useState, useEffect} from 'react';
 import './Editor.css';
-import * as monaco from 'monaco-editor'
+// import * as monaco from 'monaco-editor'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 function Editor() {
     const [editor, setEditor] = useState(null);

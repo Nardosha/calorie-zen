@@ -2,13 +2,19 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 module.exports = {
     target: ['browserslist'],
     mode: 'development',
-    entry: path.resolve(__dirname, 'src', 'index.js'),
+    entry: {
+        app: path.resolve(__dirname, 'src', 'index.js'),
+        'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
+    },
     output: {
-        filename: "[name].js",
+        publicPath: ASSET_PATH,
+        globalObject: 'self',
+        filename: "[name].bundle.js",
         path: path.resolve(__dirname, 'dist'),
         clean: true
     },
@@ -54,7 +60,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'style.css'
         }),
-        new MonacoWebpackPlugin()
+        new MonacoWebpackPlugin({languages: ['java']}),
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],

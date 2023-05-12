@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "webpack serve --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production --stats-children"
   },
   "eslintConfig": {
     "extends": [
@@ -34,7 +34,8 @@
     "sass-loader": "^13.2.2",
     "webpack": "^5.82.1",
     "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0"
+    "webpack-dev-server": "^4.15.0",
+    "worker-loader": "^3.0.8"
   },
   "browserslist": {
     "production": [
