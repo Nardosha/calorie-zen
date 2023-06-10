@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './Header';
 import Diary from './Diary';
 import Tips from './Tips';
@@ -7,6 +7,7 @@ import Register from './Register';
 import Login from './Login';
 import NavBar from './NavBar';
 import './styles/App.css';
+import ProtectedRouteElement from './ProtectedRoute';
 
 class App extends React.Component {
   constructor(props) {
@@ -23,15 +24,24 @@ class App extends React.Component {
           {this.state.loggedIn && <NavBar />}
           <Routes>
             <Route
-              path="/"
+              path="/diary"
               element={
-                this.state.loggedIn ? (
-                  <Navigate to="/diary" replace />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                <ProtectedRouteElement
+                  element={Diary}
+                  loggedIn={this.state.loggedIn}
+                />
               }
             />
+            <Route
+              path="/tips"
+              element={
+                <ProtectedRouteElement
+                  element={Tips}
+                  loggedIn={this.state.loggedIn}
+                />
+              }
+            />
+
             <Route path="/diary" element={<Diary />} />
             <Route path="/tips" element={<Tips />} />
             <Route path="/register" element={<Register />} />
