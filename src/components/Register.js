@@ -1,69 +1,71 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import * as auth from '../auth.js';
 import './styles/Register.css';
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      calGoal: ''
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleChange = (e) => {
+const Register = () => {
+  const [formValue, setFormValue] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    calGoal: ''
+  })
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
     const {name, value} = e.target;
-    this.setState({
+
+    setFormValue({
+      ...formValue,
       [name]: value
     });
   }
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // здесь обработчик регистрации
-  }
-  render(){
-    return (
-      <div className="register">
-        <p className="register__welcome">
-            Пожалуйста, зарегистрируйтесь.
-        </p>
-        <form onSubmit={this.handleSubmit} className="register__form">
-          <label htmlFor="username">
-            Логин:
-          </label>
-          <input id="username" name="username" type="text" value={this.state.username} onChange={this.handleChange} />
-          <label htmlFor="email">
-            Email:
-          </label>
-          <input id="email" name="email" type="email" value={this.state.email} onChange={this.handleChange} />
-          <label htmlFor="password">
-            Пароль:
-          </label>
-          <input id="password" name="password" type="password" value={this.state.password} onChange={this.handleChange} />
-          <label htmlFor="confirmPassword">
-            Повторите пароль:
-          </label>
-          <input id="confirmPassword" name="confirmPassword" type="password" value={this.state.confirmPassword} onChange={this.handleChange} />
-          <label htmlFor="calGoal">
-            Калории за день:
-          </label>
-          <input id="calGoal" name="calGoal" type="number" value={this.state.calGoal} onChange={this.handleChange} />
-          <div className="register__button-container">
-            <button type="submit" onSubmit={this.handleSubmit} className="register__link">Зарегистрироваться</button>
-          </div>
-        </form>
-        <div className="register__signin">
-          <p>Уже зарегистрированы?</p>
-          <Link to="login" className="register__login-link">Войти</Link>
-        </div>
-        </div>
-  );
+    if (formValue.password === formValue.confirmPassword){
+      auth.register(formValue.username, formValue.password, formValue.email).then(res => {
+        navigate('/login', {replace: true})
+      })
+    }
   }
 
+  return (
+    <div className="register">
+      <p className="register__welcome">
+        Пожалуйста, зарегистрируйтесь.
+      </p>
+      <form onSubmit={handleSubmit} className="register__form">
+        <label htmlFor="username">
+          Логин:
+        </label>
+        <input id="username" name="username" type="text" value={formValue.username} onChange={handleChange} />
+        <label htmlFor="email">
+          Email:
+        </label>
+        <input id="email" name="email" type="email" value={formValue.email} onChange={handleChange} />
+        <label htmlFor="password">
+          Пароль:
+        </label>
+        <input id="password" name="password" type="password" value={formValue.password} onChange={handleChange} />
+        <label htmlFor="confirmPassword">
+          Повторите пароль:
+        </label>
+        <input id="confirmPassword" name="confirmPassword" type="password" value={formValue.confirmPassword} onChange={handleChange} />
+        <label htmlFor="calGoal">
+          Калории за день:
+        </label>
+        <input id="calGoal" name="calGoal" type="number" value={formValue.calGoal} onChange={handleChange} />
+        <div className="register__button-container">
+          <button type="submit" onSubmit={handleSubmit} className="register__link">Зарегистрироваться</button>
+        </div>
+      </form>
+      <div className="register__signin">
+        <p>Уже зарегистрированы?</p>
+        <Link to="login" className="register__login-link">Войти</Link>
+      </div>
+    </div>
+  );
 }
 
 export default Register;
