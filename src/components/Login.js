@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import * as auth from '../auth.js';
 import './styles/Login.css';
+import { AppContext } from "./AppContext";
 
 const Login = ({ handleLogin }) => {
   const [formValue, setFormValue] = useState({
@@ -9,6 +10,7 @@ const Login = ({ handleLogin }) => {
     password: '',
   });
   const navigate = useNavigate();
+  const value = useContext(AppContext);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -28,7 +30,7 @@ const Login = ({ handleLogin }) => {
       .then(data => {
         if (data.jwt) {
           setFormValue({ username: '', password: '' });
-          handleLogin();
+          value.handleLogin(formValue);
           navigate('/diary', { replace: true });
         }
       })

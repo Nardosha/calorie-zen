@@ -1,13 +1,35 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import './styles/NavBar.css';
 
 function NavBar() {
+  const navigate = useNavigate();
+
+  const signOut = () => {
+    localStorage.removeItem('jwt');
+    navigate('/login');
+  };
   return (
-    <nav className="menu">
-      <NavLink to="/diary" className={({isActive}) => `menu__item ${isActive ? "menu__item_active" : ""}`}>Домой</NavLink>
-      <NavLink to="/tips" className={({isActive}) => `menu__item ${isActive ? "menu__item_active" : ""}`}>Советы</NavLink>
-    </nav>
+    <div className="navbar">
+      <ul className="navbar__nav">
+        <li>
+          <Link to="ducks" className="navbar__link">
+            Утки
+          </Link>
+        </li>
+        <li>
+          <Link to="my-profile" className="navbar__link">
+            Мой профиль
+          </Link>
+        </li>
+        <li>
+          <button onClick={signOut} className="navbar__link navbar__button">
+            Выйти
+          </button>
+        </li>
+      </ul>
+    </div>
   );
 }
 

@@ -1,48 +1,47 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import FoodAdder from './FoodAdder';
 import './styles/Diary.css';
+import { AppContext } from './AppContext';
 
-class Diary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      foodList: [],
-      calorieTotal: 0
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleSubmit = (food, calories) => {
+const Diary = () => {
+  const [state, setState] = useState({
+    foodList: [],
+    calorieTotal: 0,
+  });
+
+  const context = useContext(AppContext);
+
+  const handleSubmit = (food, calories) => {
     let calorieTotal = 0;
-    var newList = this.state.foodList.slice();
-    newList.push({food, calories});
-    // получаем сумму калорий
-    newList.forEach((entry) => {
+    const newList = state.foodList.slice();
+    newList.push({ food, calories });
+    newList.forEach(entry => {
       calorieTotal = calorieTotal + parseInt(entry.calories);
     });
-    this.setState({
+    setState({
       foodList: newList,
-      calorieTotal
+      calorieTotal,
     });
-  }
-  render(){
-    return (
-      <div className="diary">
-        <div className="calories">
-          <h2>Цель на день: {this.props.calGoal}</h2>
-          <h2>Калории: {this.state.calorieTotal}</h2>
-          <ul className="calories__list">
-            {this.state.foodList.map((food, i) => {
-              return(
-                <li key={i} >{food.food} - {food.calories}</li>
-              )
-            })}
-          </ul>
-        </div>
-        <FoodAdder handleSubmit={this.handleSubmit} />
-      </div>
-  );
-  }
+  };
 
-}
+  return (
+    <div className="diary">
+      <div className="calories">
+        <h2>Цель на день: {context.calGoal}</h2>
+        <h2>Калории: {state.calorieTotal}</h2>
+        <ul className="calories__list">
+          {state.foodList.map((food, i) => {
+            return (
+              <li key={i}>
+                {food.food} - {food.calories}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <FoodAdder handleSubmit={handleSubmit} />
+    </div>
+  );
+};
 
 export default Diary;

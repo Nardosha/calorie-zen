@@ -4,8 +4,9 @@ import {
   Route,
   Routes,
   Navigate,
-  useNavigate,
-} from 'react-router-dom';
+  useNavigate, Router
+} from "react-router-dom";
+import { AppContext } from './AppContext';
 import Header from './Header';
 import Diary from './Diary';
 import Tips from './Tips';
@@ -21,6 +22,11 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [calGoal, setCalGoal] = useState(false);
   const navigate = useNavigate();
+
+  const [user, setUser] = useState({
+    username: '',
+    password: '',
+  });
 
   useEffect(() => {
     handleTokenCheck();
@@ -47,11 +53,17 @@ const App = () => {
       });
     }
   };
-  const handleLogin = () => {
+  const handleLogin = userData => {
     setLoggedIn(true);
+    if (!userData) return;
+    setUser({
+      username: userData.username,
+      password: userData.password,
+    });
   };
+
   return (
-    <>
+    <AppContext.Provider value={{ user, loggedIn, calGoal, handleLogin }}>
       <Header />
       <main className="content">
         {loggedIn && <NavBar />}
@@ -69,7 +81,7 @@ const App = () => {
           <Route
             path="/diary"
             element={
-              <ProtectedRouteElement element={Diary} loggedIn={loggedIn} calGoal={calGoal}/>
+              <ProtectedRouteElement element={Diary} calGoal={calGoal} />
             }
           />
           <Route
@@ -82,7 +94,7 @@ const App = () => {
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         </Routes>
       </main>
-    </>
+    </AppContext.Provider>
   );
 };
 
