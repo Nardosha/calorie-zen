@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 import Header from './Header';
 import Diary from './Diary';
 import Tips from './Tips';
@@ -7,33 +13,39 @@ import Register from './Register';
 import Login from './Login';
 import NavBar from './NavBar';
 import * as auth from '../auth.js';
+import * as calData from '../data';
 import './styles/App.css';
 import ProtectedRouteElement from './ProtectedRoute';
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState();
-
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [calGoal, setCalGoal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     handleTokenCheck();
-    // проверьте токен здесь
   }, []);
 
   const handleTokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
       auth.checkToken(jwt).then(res => {
-        setLoggedIn(true);
-        navigate('/diary', {replace: true})
-      })
+        let calGoal = 0;
+        // найдём выбранное пользователем количество калорий
+        // из списка возможных целей
+        calData.calData.forEach(goal => {
+          if (goal.id === res.ru_cal_goal) {
+            // цель, выбранная пользователем
+            calGoal = goal.calGoal;
+          }
+        });
+        if (res) {
+          setLoggedIn(true);
+          setCalGoal(calGoal);
+          navigate('/diary', { replace: true });
+        }
+      });
     }
-    // проверьте, есть ли jwt токен в локальном хранилище браузера
-    // если это так, возьмите этот токен и создайте переменную jwt
-    // вызовите метод auth.checkToken(), передающий этот токен
-    // внутри следующего then(), если там есть объект res,
-    // установите loggedIn значение true
-    // перенаправьте пользователя в /diary
   };
   const handleLogin = () => {
     setLoggedIn(true);

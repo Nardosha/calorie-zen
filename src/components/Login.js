@@ -26,7 +26,7 @@ const Login = ({ handleLogin }) => {
     auth
       .authorize(formValue.username, formValue.password)
       .then(data => {
-        if (data?.jwt) {
+        if (data.jwt) {
           setFormValue({ username: '', password: '' });
           handleLogin();
           navigate('/diary', { replace: true });
