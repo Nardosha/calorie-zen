@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Header from './Header';
 import Diary from './Diary';
 import Tips from './Tips';
@@ -9,24 +9,37 @@ import NavBar from './NavBar';
 import './styles/App.css';
 
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
+    this.state = {
+      loggedIn: false,
+    };
   }
-  render(){
+  render() {
     return (
-    <BrowserRouter>
-      <Header />
-      <main className="content">
-        <NavBar />
-        <Routes>
-          <Route path="/diary" element={<Diary />} />
-          <Route path="/tips" element={<Tips />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </main>
-    </BrowserRouter>
-  );
+      <BrowserRouter>
+        <Header />
+        <main className="content">
+          {this.state.loggedIn && <NavBar />}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                this.state.loggedIn ? (
+                  <Navigate to="/diary" replace />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route path="/diary" element={<Diary />} />
+            <Route path="/tips" element={<Tips />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    );
   }
 }
 
