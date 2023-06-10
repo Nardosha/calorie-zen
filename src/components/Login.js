@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import * as auth from '../auth.js';
 import './styles/Login.css';
 
-const Login = ({handleLogin}) => {
+const Login = ({ handleLogin }) => {
   const [formValue, setFormValue] = useState({
     username: '',
     password: '',
   });
-
   const navigate = useNavigate();
 
   const handleChange = e => {
@@ -27,13 +26,10 @@ const Login = ({handleLogin}) => {
     auth
       .authorize(formValue.username, formValue.password)
       .then(data => {
-        console.log(data);
         if (data?.jwt) {
-
-        setFormValue({username: '', password: ''});
-        handleLogin();
-        navigate('/diary', {replace: true});
-
+          setFormValue({ username: '', password: '' });
+          handleLogin();
+          navigate('/diary', { replace: true });
         }
       })
       .catch(err => console.log(err));

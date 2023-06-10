@@ -13,12 +13,23 @@ import ProtectedRouteElement from './ProtectedRoute';
 const App = () => {
   const [loggedIn, setLoggedIn] = useState();
 
+  useEffect(() => {
+    // проверьте токен здесь
+  }, []);
+
+  const handleTokenCheck = () => {
+    // проверьте, есть ли jwt токен в локальном хранилище браузера
+    // если это так, возьмите этот токен и создайте переменную jwt
+    // вызовите метод auth.checkToken(), передающий этот токен
+    // внутри следующего then(), если там есть объект res,
+    // установите loggedIn значение true
+    // перенаправьте пользователя в /diary
+  };
   const handleLogin = () => {
     setLoggedIn(true);
   };
-
   return (
-    <BrowserRouter>
+    <>
       <Header />
       <main className="content">
         {loggedIn && <NavBar />}
@@ -49,7 +60,7 @@ const App = () => {
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
         </Routes>
       </main>
-    </BrowserRouter>
+    </>
   );
 };
 
