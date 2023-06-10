@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import Header from './Header';
 import Diary from './Diary';
 import Tips from './Tips';
@@ -13,11 +13,21 @@ import ProtectedRouteElement from './ProtectedRoute';
 const App = () => {
   const [loggedIn, setLoggedIn] = useState();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    handleTokenCheck();
     // проверьте токен здесь
   }, []);
 
   const handleTokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.checkToken(jwt).then(res => {
+        setLoggedIn(true);
+        navigate('/diary', {replace: true})
+      })
+    }
     // проверьте, есть ли jwt токен в локальном хранилище браузера
     // если это так, возьмите этот токен и создайте переменную jwt
     // вызовите метод auth.checkToken(), передающий этот токен
