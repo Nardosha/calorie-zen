@@ -69,7 +69,7 @@ const App = () => {
           <Route
             path="/diary"
             element={
-              <ProtectedRouteElement element={Diary} loggedIn={loggedIn} />
+              <ProtectedRouteElement element={Diary} loggedIn={loggedIn} calGoal={calGoal}/>
             }
           />
           <Route

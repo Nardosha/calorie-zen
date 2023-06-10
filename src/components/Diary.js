@@ -28,7 +28,7 @@ class Diary extends React.Component {
     return (
       <div className="diary">
         <div className="calories">
-          <h2>Цель на день: {/* суммa калорий */}</h2>
+          <h2>Цель на день: {this.props.calGoal}</h2>
           <h2>Калории: {this.state.calorieTotal}</h2>
           <ul className="calories__list">
             {this.state.foodList.map((food, i) => {
